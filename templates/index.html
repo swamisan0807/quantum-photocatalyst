@@ -1,84 +1,133 @@
-<!-- templates/index.html -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Quantum Photocatalyst Optimizer</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Quantum Photocatalyst Simulator</title>
   <style>
-    :root{
-      --bg1:#060612;--panel:#071225;--accent1:#00d8ff;--accent2:#ff00d4;
-      --glass: rgba(255,255,255,0.04);--muted:#9fb7d8;
+    :root {
+      --bg1: #060612; --panel: #071225; --accent1: #00d8ff; --accent2: #ff00d4;
     }
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,#060612 0%, #081229 100%);font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#cfefff;}
-    .grid-bg{position:fixed;inset:0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 60px 60px; opacity:0.9; z-index:-1;}
-    header{padding:28px 24px;text-align:center}
-    h1{font-family: 'Orbitron', sans-serif; font-size:34px; margin:0; background:linear-gradient(90deg,var(--accent1),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:1px;}
-    .subtitle{color:var(--muted); margin-top:6px}
-    .stats-bar{display:flex;justify-content:center;gap:30px;margin-top:15px;flex-wrap:wrap}
-    .stat-item{text-align:center;padding:10px 20px;background:rgba(0,216,255,0.08);border-radius:8px;border:1px solid rgba(0,216,255,0.2)}
-    .stat-value{font-size:24px;font-weight:700;color:var(--accent1)}
-    .stat-label{font-size:12px;color:var(--muted);margin-top:4px}
-    .container{max-width:1200px;margin:24px auto;padding:0 18px; display:grid; grid-template-columns: 1fr 1fr; gap:22px;}
-    .panel{background:var(--panel); border-radius:14px; padding:22px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); border:1px solid rgba(0,216,255,0.06); position:relative}
-    label{display:block;margin:10px 0 6px;color:#bfeaff;font-weight:500}
-    select,input[type=range]{width:100%; padding:10px;border-radius:8px;border:1px solid rgba(0,216,255,0.2);background:var(--glass); color:#e6f9ff;font-size:14px}
-    select{cursor:pointer;transition:all 0.3s ease}
-    select:focus{outline:none;border-color:var(--accent1);box-shadow:0 0 0 3px rgba(0,216,255,0.1)}
-    select[multiple]{height:160px; padding:8px; overflow:auto;background:rgba(7,18,37,0.8)}
-    select[multiple] option{padding:6px 10px;margin:2px 0;border-radius:4px;cursor:pointer}
-    select[multiple] option:hover{background:rgba(0,216,255,0.15)}
-    select[multiple] option:checked{background:linear-gradient(90deg,rgba(0,216,255,0.3),rgba(255,0,212,0.3));font-weight:600}
-    .btn{display:inline-block;margin-top:14px;padding:12px 18px;border-radius:10px;border:none;width:100%;cursor:pointer;font-weight:700;font-size:15px;background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:#060612;box-shadow:0 6px 30px rgba(0,216,255,0.12);transition:transform 0.2s,box-shadow 0.2s}
-    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 35px rgba(0,216,255,0.25)}
-    .btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-    .btn-secondary{background:linear-gradient(135deg,#1a2744,#2d4466);color:#00d8ff;margin-top:8px;font-size:14px;padding:10px}
-    .circuit{min-height:320px;background:rgba(0,0,0,0.25); border-radius:10px; display:flex;align-items:center;justify-content:center;color:#84dfff;overflow:hidden;padding:15px}
-    .circuit img{max-width:100%;max-height:100%;border-radius:8px}
-    .results{margin-top:12px;background:rgba(255,255,255,0.02); padding:16px;border-radius:8px;color:#dff7ff;border:1px solid rgba(0,216,255,0.1)}
-    .results strong{color:#00d8ff}
-    .download-section{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-    .download-btn{padding:12px;background:linear-gradient(135deg,#2a3f5f,#1a2f4f);border:1px solid rgba(0,216,255,0.3);border-radius:8px;color:#00d8ff;cursor:pointer;font-size:13px;font-weight:600;text-align:center;transition:all 0.3s;border:none}
-    .download-btn:hover{background:linear-gradient(135deg,#3a5f8f,#2a4f7f);transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,216,255,0.2)}
-    .download-btn.excel{background:linear-gradient(135deg,#1e7145,#0d5c2f);border:1px solid rgba(0,255,128,0.3);color:#00ff80}
-    .download-btn.excel:hover{background:linear-gradient(135deg,#2e9155,#1d7c4f);box-shadow:0 4px 20px rgba(0,255,128,0.2)}
-    .hint{font-size:13px;color:#9fb7d8;margin-top:6px;font-style:italic}
-    .select-all-btn{font-size:12px;padding:6px 14px;background:rgba(0,216,255,0.1);border:1px solid rgba(0,216,255,0.3);border-radius:5px;color:#00d8ff;cursor:pointer;margin-top:8px;display:inline-block;margin-right:8px;transition:all 0.3s}
-    .select-all-btn:hover{background:rgba(0,216,255,0.2);transform:translateY(-1px)}
-    .depth-info{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-    .depth-card{background:rgba(0,216,255,0.05);padding:10px;border-radius:6px;text-align:center;border:1px solid rgba(0,216,255,0.15)}
-    .depth-card.active{border-color:var(--accent1);background:rgba(0,216,255,0.15)}
-    .depth-level{font-size:16px;font-weight:700;color:var(--accent1)}
-    .depth-qubits{font-size:12px;color:var(--muted);margin-top:4px}
-    footer{text-align:center;color:#7f9fbf;padding:18px;font-size:14px}
-    @media(max-width:900px){ 
-      .container{grid-template-columns:1fr} 
-      .circuit{min-height:240px}
-      .download-section{grid-template-columns:1fr}
-      .depth-info{grid-template-columns:repeat(2,1fr)}
-      .stats-bar{gap:15px}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: linear-gradient(180deg, #060612 0%, #081229 100%);
+      color: #cfefff;
+      min-height: 100vh;
+    }
+    .grid-bg {
+      position: fixed; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px; opacity: 0.9; z-index: -1;
+    }
+    header { padding: 28px 24px; text-align: center; }
+    h1 {
+      font-size: 32px;
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      letter-spacing: 1px; font-weight: 800;
+    }
+    .subtitle { color: #9fb7d8; margin-top: 6px; font-size: 15px; }
+    .stats-bar {
+      display: flex; justify-content: center; gap: 20px; margin-top: 15px; flex-wrap: wrap;
+    }
+    .stat-item {
+      text-align: center; padding: 10px 18px;
+      background: rgba(0,216,255,0.08); border-radius: 8px;
+      border: 1px solid rgba(0,216,255,0.2);
+    }
+    .stat-value { font-size: 22px; font-weight: 700; color: var(--accent1); }
+    .stat-label { font-size: 11px; color: #9fb7d8; margin-top: 4px; }
+    .container {
+      max-width: 1600px; margin: 24px auto; padding: 0 18px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+    }
+    .panel {
+      background: var(--panel); border-radius: 14px; padding: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6); border: 1px solid rgba(0,216,255,0.06);
+    }
+    .panel h3 { margin: 0 0 12px 0; color: #00d8ff; font-size: 18px; }
+    label {
+      display: block; margin: 10px 0 6px; color: #bfeaff; font-weight: 500; font-size: 13px;
+    }
+    select, input[type="range"], input[type="number"] {
+      width: 100%; padding: 10px; border-radius: 8px;
+      border: 1px solid rgba(0,216,255,0.2);
+      background: rgba(255,255,255,0.04); color: #e6f9ff; font-size: 14px;
+    }
+    select[multiple] {
+      height: 120px; padding: 8px; background: rgba(7,18,37,0.8);
+    }
+    select[multiple] option {
+      padding: 6px 10px; margin: 2px 0; border-radius: 4px; cursor: pointer;
+    }
+    select[multiple] option:checked {
+      background: linear-gradient(90deg, rgba(0,216,255,0.3), rgba(255,0,212,0.3));
+      font-weight: 600;
+    }
+    .btn {
+      margin-top: 14px; padding: 12px 18px; border-radius: 10px; border: none;
+      width: 100%; cursor: pointer; font-weight: 700; font-size: 15px;
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      color: #060612; box-shadow: 0 6px 30px rgba(0,216,255,0.12);
+      transition: transform 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .select-all-btn {
+      font-size: 11px; padding: 5px 12px;
+      background: rgba(0,216,255,0.1); border: 1px solid rgba(0,216,255,0.3);
+      border-radius: 5px; color: #00d8ff; cursor: pointer;
+      margin-top: 6px; margin-right: 8px;
+    }
+    .param-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0;
+    }
+    .circuit {
+      min-height: 250px; background: rgba(0,0,0,0.25); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: #84dfff; padding: 15px; border: 1px solid rgba(0,216,255,0.1);
+    }
+    .circuit img { max-width: 100%; border-radius: 8px; }
+    .results-box {
+      margin-top: 12px; background: rgba(255,255,255,0.02);
+      padding: 16px; border-radius: 8px; border: 1px solid rgba(0,216,255,0.1);
+    }
+    .metric-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+      font-size: 13px; margin-top: 8px;
+    }
+    .results-box strong { color: #00d8ff; }
+    .download-section {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px;
+    }
+    .download-btn {
+      padding: 10px; background: linear-gradient(135deg, #2a3f5f, #1a2f4f);
+      border: 1px solid rgba(0,216,255,0.3); border-radius: 8px;
+      color: #00d8ff; cursor: pointer; font-size: 12px; font-weight: 600; text-align: center;
+    }
+    .download-btn.excel {
+      background: linear-gradient(135deg, #1e7145, #0d5c2f); color: #00ff80;
+    }
+    footer { text-align: center; color: #7f9fbf; padding: 18px; font-size: 13px; }
+    @media(max-width: 1200px) {
+      .container { grid-template-columns: 1fr; }
+      .param-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="grid-bg"></div>
-
+  
   <header>
-    <h1>⚛️ Quantum Photocatalyst Optimizer</h1>
-    <div class="subtitle">Advanced nanomaterial composites optimization with quantum computing simulation</div>
+    <h1>⚛️ Advanced Quantum Photocatalyst Simulator</h1>
+    <div class="subtitle">Complete photocatalysis analysis: Dye degradation • Absorption spectroscopy • Optical bandgap • Tauc plot</div>
     <div class="stats-bar">
-      <div class="stat-item">
-        <div class="stat-value">150+</div>
-        <div class="stat-label">Nanomaterials</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value" id="selectedCount">0</div>
-        <div class="stat-label">Selected Materials</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value" id="qubitCount">15</div>
-        <div class="stat-label">Qubits</div>
-      </div>
+      <div class="stat-item"><div class="stat-value">200+</div><div class="stat-label">Materials</div></div>
+      <div class="stat-item"><div class="stat-value" id="catCount">1</div><div class="stat-label">Catalysts</div></div>
+      <div class="stat-item"><div class="stat-value" id="dyeCount">1</div><div class="stat-label">Dyes</div></div>
+      <div class="stat-item"><div class="stat-value" id="qubitCount">15</div><div class="stat-label">Qubits</div></div>
     </div>
   </header>
 
@@ -86,518 +135,335 @@
     <section class="panel">
       <h3>🧪 Material Configuration</h3>
 
-      <label>Choose Nanomaterials (Multi-select enabled)</label>
+      <label>🎨 Target Dyes (Multiple concentrations supported)</label>
+      <select id="dyeType" multiple>
+        <option value="MethyleneBlue" selected>Methylene Blue</option>
+        <option value="RhodamineB">Rhodamine B</option>
+        <option value="MethylOrange">Methyl Orange</option>
+        <option value="CrystalViolet">Crystal Violet</option>
+        <option value="CongoRed">Congo Red</option>
+        <option value="MalachiteGreen">Malachite Green</option>
+      </select>
+      <button class="select-all-btn" onclick="selectAll('dyeType')">All</button>
+      <button class="select-all-btn" onclick="clearAll('dyeType')">Clear</button>
+
+      <label>⚗️ Photocatalyst Systems</label>
       <select id="materialType" multiple>
-        <optgroup label="🔷 Metal Oxides (50 materials)">
+        <optgroup label="Metal Oxides & Sulfides">
           <option value="TiO2" selected>Titanium Dioxide (TiO₂)</option>
           <option value="ZnO">Zinc Oxide (ZnO)</option>
           <option value="WO3">Tungsten Trioxide (WO₃)</option>
           <option value="BiVO4">Bismuth Vanadate (BiVO₄)</option>
-          <option value="Fe2O3">Hematite (Fe₂O₃)</option>
-          <option value="Cu2O">Copper Oxide (Cu₂O)</option>
-          <option value="SnO2">Tin Dioxide (SnO₂)</option>
-          <option value="NiO">Nickel Oxide (NiO)</option>
-          <option value="Co3O4">Cobalt Oxide (Co₃O₄)</option>
-          <option value="In2O3">Indium Oxide (In₂O₃)</option>
-          <option value="CuO">Copper(II) Oxide (CuO)</option>
-          <option value="CeO2">Ceria (CeO₂)</option>
-          <option value="V2O5">Vanadium Pentoxide (V₂O₅)</option>
-          <option value="MnO2">Manganese Dioxide (MnO₂)</option>
-          <option value="Nb2O5">Niobium Pentoxide (Nb₂O₅)</option>
-          <option value="ZrO2">Zirconia (ZrO₂)</option>
-          <option value="Al2O3">Alumina (Al₂O₃)</option>
-          <option value="Ga2O3">Gallium Oxide (Ga₂O₃)</option>
-          <option value="Y2O3">Yttria (Y₂O₃)</option>
-          <option value="MgO">Magnesia (MgO)</option>
-          <option value="GeO2">Germanium Oxide (GeO₂)</option>
-          <option value="PbO">Lead Oxide (PbO)</option>
-          <option value="VO2">Vanadium Dioxide (VO₂)</option>
-          <option value="Cr2O3">Chromium Oxide (Cr₂O₃)</option>
-          <option value="NiCo2O4">Nickel Cobalt Oxide (NiCo₂O₄)</option>
-          <option value="ZnFe2O4">Zinc Ferrite (ZnFe₂O₄)</option>
-          <option value="CoFe2O4">Cobalt Ferrite (CoFe₂O₄)</option>
-          <option value="MnFe2O4">Manganese Ferrite (MnFe₂O₄)</option>
-          <option value="CuFe2O4">Copper Ferrite (CuFe₂O₄)</option>
-          <option value="NiFe2O4">Nickel Ferrite (NiFe₂O₄)</option>
-          <option value="Mn3O4">Manganese Oxide (Mn₃O₄)</option>
-          <option value="Fe3O4-NPs">Magnetite Nanoparticles</option>
-          <option value="TiO2-P25">TiO₂ P25</option>
-          <option value="ZnO-NRs">ZnO Nanorods</option>
-          <option value="WO3-NPs">WO₃ Nanoparticles</option>
-          <option value="SnO2-QDs">SnO₂ Quantum Dots</option>
-          <option value="CuO-NWs">CuO Nanowires</option>
-          <option value="NiO-NPs">NiO Nanoparticles</option>
-          <option value="TiO2-NT">TiO₂ Nanotubes</option>
-          <option value="ZnO-NWs">ZnO Nanowires</option>
-          <option value="SrTiO3">Strontium Titanate (SrTiO₃)</option>
-          <option value="BaTiO3">Barium Titanate (BaTiO₃)</option>
-          <option value="Bi2WO6">Bismuth Tungstate (Bi₂WO₆)</option>
-          <option value="Bi2O3">Bismuth Oxide (Bi₂O₃)</option>
-          <option value="Ta2O5">Tantalum Pentoxide (Ta₂O₅)</option>
-          <option value="RuO2">Ruthenium Dioxide (RuO₂)</option>
-          <option value="IrO2">Iridium Dioxide (IrO₂)</option>
-          <option value="LaFeO3">Lanthanum Ferrite (LaFeO₃)</option>
-          <option value="Fe3O4">Magnetite (Fe₃O₄)</option>
-        </optgroup>
-        <optgroup label="⚡ Sulfides & Selenides (25 materials)">
           <option value="CdS">Cadmium Sulfide (CdS)</option>
-          <option value="CdSe">Cadmium Selenide (CdSe)</option>
-          <option value="ZnS">Zinc Sulfide (ZnS)</option>
-          <option value="Cu2S">Copper(I) Sulfide (Cu₂S)</option>
-          <option value="Sb2S3">Antimony Sulfide (Sb₂S₃)</option>
-          <option value="PbS">Lead Sulfide (PbS)</option>
-          <option value="MoS2">Molybdenum Disulfide (MoS₂)</option>
-          <option value="WS2">Tungsten Disulfide (WS₂)</option>
-          <option value="SnS2">Tin Disulfide (SnS₂)</option>
-          <option value="Bi2S3">Bismuth Sulfide (Bi₂S₃)</option>
-          <option value="ZnIn2S4">Zinc Indium Sulfide (ZnIn₂S₄)</option>
-          <option value="CuInS2">Copper Indium Sulfide (CuInS₂)</option>
-          <option value="CdIn2S4">Cadmium Indium Sulfide (CdIn₂S₄)</option>
-          <option value="Ag2S">Silver Sulfide (Ag₂S)</option>
-          <option value="CuS">Copper Sulfide (CuS)</option>
-          <option value="FeS2">Iron Pyrite (FeS₂)</option>
-          <option value="In2S3">Indium Sulfide (In₂S₃)</option>
-          <option value="CdTe">Cadmium Telluride (CdTe)</option>
-          <option value="PbSe">Lead Selenide (PbSe)</option>
-          <option value="Bi2Se3">Bismuth Selenide (Bi₂Se₃)</option>
-          <option value="MoSe2">Molybdenum Diselenide (MoSe₂)</option>
-          <option value="WSe2">Tungsten Diselenide (WSe₂)</option>
-          <option value="SnSe">Tin Selenide (SnSe)</option>
-          <option value="Sb2Se3">Antimony Selenide (Sb₂Se₃)</option>
-          <option value="Cu2Se">Copper Selenide (Cu₂Se)</option>
-          <option value="Ag2Se">Silver Selenide (Ag₂Se)</option>
-        </optgroup>
-        <optgroup label="💎 Perovskites (15 materials)">
-          <option value="CsPbBr3">Cesium Lead Bromide (CsPbBr₃)</option>
-          <option value="CsPbI3">Cesium Lead Iodide (CsPbI₃)</option>
-          <option value="CsPbCl3">Cesium Lead Chloride (CsPbCl₃)</option>
-          <option value="MAPbI3">Methylammonium Lead Iodide</option>
-          <option value="FAPbI3">Formamidinium Lead Iodide</option>
-          <option value="CsSnI3">Cesium Tin Iodide (CsSnI₃)</option>
-          <option value="LaCoO3">Lanthanum Cobaltite (LaCoO₃)</option>
-          <option value="LaNiO3">Lanthanum Nickelate (LaNiO₃)</option>
-          <option value="SrTiO3-NPs">SrTiO₃ Nanoparticles</option>
-          <option value="BaTiO3-NPs">BaTiO₃ Nanoparticles</option>
-          <option value="CaTiO3">Calcium Titanate (CaTiO₃)</option>
-          <option value="PbTiO3">Lead Titanate (PbTiO₃)</option>
-          <option value="BiFeO3">Bismuth Ferrite (BiFeO₃)</option>
-          <option value="LaAlO3">Lanthanum Aluminate (LaAlO₃)</option>
-          <option value="NdGaO3">Neodymium Gallate (NdGaO₃)</option>
-        </optgroup>
-        <optgroup label="🖤 Carbon-based (20 materials)">
-          <option value="gC3N4">Graphitic Carbon Nitride (g-C₃N₄)</option>
-          <option value="C3N4x">C₃N₄ Derivative</option>
-          <option value="BlackP">Black Phosphorus</option>
-          <option value="Graphene">Graphene</option>
-          <option value="CNT">Carbon Nanotubes</option>
-          <option value="Fullerene">Fullerene (C₆₀/C₇₀)</option>
-          <option value="GrapheneOxide">Graphene Oxide</option>
-          <option value="ReducedGO">Reduced Graphene Oxide</option>
-          <option value="CarbonDots">Carbon Dots</option>
-          <option value="Graphdiyne">Graphdiyne</option>
-          <option value="CNT-MWCNT">Multi-Walled CNT</option>
-          <option value="CNT-SWCNT">Single-Walled CNT</option>
-          <option value="C60">Buckminsterfullerene (C₆₀)</option>
-          <option value="C70">C₇₀ Fullerene</option>
-          <option value="GrapheneNR">Graphene Nanoribbons</option>
-          <option value="N-Graphene">Nitrogen-Doped Graphene</option>
-          <option value="B-Graphene">Boron-Doped Graphene</option>
-          <option value="S-Graphene">Sulfur-Doped Graphene</option>
-          <option value="P-Graphene">Phosphorus-Doped Graphene</option>
-          <option value="Graphyne">Graphyne</option>
-        </optgroup>
-        <optgroup label="✨ Noble Metal Decorated (15 materials)">
-          <option value="Pt/TiO2">Pt/TiO₂</option>
-          <option value="Au/TiO2">Au/TiO₂</option>
-          <option value="Pd/CuO">Pd/CuO</option>
-          <option value="Ag/TiO2">Ag/TiO₂</option>
-          <option value="Au/ZnO">Au/ZnO</option>
-          <option value="Pt/gC3N4">Pt/g-C₃N₄</option>
-          <option value="Pd/BiVO4">Pd/BiVO₄</option>
-          <option value="Ru/TiO2">Ru/TiO₂</option>
-          <option value="Rh/TiO2">Rh/TiO₂</option>
-          <option value="Ag/BiVO4">Ag/BiVO₄</option>
-          <option value="Au/CdS">Au/CdS</option>
-          <option value="Pt/WO3">Pt/WO₃</option>
-          <option value="Pd/ZnO">Pd/ZnO</option>
-          <option value="Ag/gC3N4">Ag/g-C₃N₄</option>
-          <option value="Au/MoS2">Au/MoS₂</option>
-        </optgroup>
-        <optgroup label="🔧 Nitrides & Phosphides (15 materials)">
-          <option value="TiN">Titanium Nitride (TiN)</option>
-          <option value="NbN">Niobium Nitride (NbN)</option>
-          <option value="GaN">Gallium Nitride (GaN)</option>
-          <option value="Ta3N5">Tantalum Nitride (Ta₃N₅)</option>
-          <option value="InN">Indium Nitride (InN)</option>
-          <option value="AlN">Aluminum Nitride (AlN)</option>
-          <option value="Ni2P">Nickel Phosphide (Ni₂P)</option>
-          <option value="CoP">Cobalt Phosphide (CoP)</option>
-          <option value="FeP">Iron Phosphide (FeP)</option>
-          <option value="Cu3P">Copper Phosphide (Cu₃P)</option>
-          <option value="MoN">Molybdenum Nitride (MoN)</option>
-          <option value="WN">Tungsten Nitride (WN)</option>
-          <option value="VN">Vanadium Nitride (VN)</option>
-          <option value="CrN">Chromium Nitride (CrN)</option>
-          <option value="ZrN">Zirconium Nitride (ZrN)</option>
-        </optgroup>
-        <optgroup label="🏗️ MOFs & Hybrid (10 materials)">
-          <option value="UiO66">UiO-66</option>
-          <option value="MIL101">MIL-101</option>
-          <option value="ZIF8">ZIF-8</option>
-          <option value="HKUST1">HKUST-1</option>
-          <option value="MOF5">MOF-5</option>
-          <option value="PCN222">PCN-222</option>
-          <option value="MXeneTi3C2">MXene (Ti₃C₂)</option>
-          <option value="MXeneV2C">MXene (V₂C)</option>
-          <option value="COF-1">COF-1</option>
-          <option value="ZIF-67">ZIF-67</option>
-        </optgroup>
-        <optgroup label="🌟 Advanced Materials (20 materials)">
-          <option value="BiOCl">Bismuth Oxychloride (BiOCl)</option>
-          <option value="BiOBr">Bismuth Oxybromide (BiOBr)</option>
-          <option value="BiOI">Bismuth Oxyiodide (BiOI)</option>
-          <option value="WO3-x">Oxygen-deficient WO₃-x</option>
-          <option value="MoOx">Molybdenum Oxide (MoOₓ)</option>
-          <option value="ReO3">Rhenium Trioxide (ReO₃)</option>
           <option value="Ag3PO4">Silver Phosphate (Ag₃PO₄)</option>
-          <option value="Ag2O">Silver Oxide (Ag₂O)</option>
-          <option value="CuWO4">Copper Tungstate (CuWO₄)</option>
-          <option value="CuBi2O4">Copper Bismuth Oxide (CuBi₂O₄)</option>
-          <option value="ZnWO4">Zinc Tungstate (ZnWO₄)</option>
-          <option value="AgBr">Silver Bromide (AgBr)</option>
-          <option value="AgCl">Silver Chloride (AgCl)</option>
-          <option value="AgI">Silver Iodide (AgI)</option>
-          <option value="BiPO4">Bismuth Phosphate (BiPO₄)</option>
-          <option value="Bi4Ti3O12">Bismuth Titanate</option>
-          <option value="CaBi2O4">Calcium Bismuth Oxide</option>
-          <option value="ZnV2O6">Zinc Vanadate (ZnV₂O₆)</option>
-          <option value="BiVO4-NPs">BiVO₄ Nanoparticles</option>
-          <option value="Fe2TiO5">Iron Titanate (Fe₂TiO₅)</option>
+        </optgroup>
+        <optgroup label="Advanced Carbon Systems">
+          <option value="gC3N4">g-C₃N₄</option>
+          <option value="CNT">Carbon Nanotubes</option>
+          <option value="Graphene">Graphene</option>
+          <option value="RGO">Reduced Graphene Oxide</option>
+        </optgroup>
+        <optgroup label="CNT-Doped Systems">
+          <option value="CNT-AgNPs">CNT-doped Ag Nanoparticles</option>
+          <option value="CNT-Ag-Zn-BMNPs">CNT-Ag-Zn Bimetallic NPs</option>
+          <option value="CNT-Ni-Co-Fe">CNT-Ni-Co-Fe System</option>
+        </optgroup>
+        <optgroup label="Bimetallic Nanoparticles (BMNPs)">
+          <option value="Ag-Au-BMNPs">Ag-Au BMNPs</option>
+          <option value="Pt-Pd-BMNPs">Pt-Pd BMNPs</option>
+          <option value="Cu-Ni-BMNPs">Cu-Ni BMNPs</option>
+        </optgroup>
+        <optgroup label="Transition Metal Nanocomposites (TMNCs)">
+          <option value="RGO-TMNCs">RGO-based TMNCs</option>
+          <option value="CNT-TMNCs">CNT-based TMNCs</option>
+          <option value="Polymer-TMNCs">Flexible Polymer TMNCs</option>
         </optgroup>
       </select>
-      <div class="hint">💡 Hold Ctrl (Windows) or ⌘ (Mac) to select multiple materials for composite optimization</div>
-      <button class="select-all-btn" onclick="selectAllMaterials()">Select All</button>
-      <button class="select-all-btn" onclick="clearMaterials()">Clear All</button>
+      <button class="select-all-btn" onclick="selectAll('materialType')">All</button>
+      <button class="select-all-btn" onclick="clearAll('materialType')">Clear</button>
 
-      <label>Target Band Gap <span id="bandgapValue">2.5 eV</span></label>
-      <input id="targetBandgap" type="range" min="1.5" max="4.0" step="0.1" value="2.5">
+      <div class="param-grid">
+        <div>
+          <label>Dye Conc. <span id="dyeConcVal">20 ppm</span></label>
+          <input id="dyeConc" type="range" min="1" max="100" value="20">
+        </div>
+        <div>
+          <label>Add Concentration Variant</label>
+          <input id="dyeConcVariant" type="number" placeholder="e.g., 50" style="padding:8px">
+        </div>
+        <div>
+          <label>Catalyst Conc. <span id="catConcVal">5 mg</span></label>
+          <input id="catConc" type="range" min="1" max="10" step="0.5" value="5">
+        </div>
+        <div>
+          <label>Particle Size <span id="catSizeVal">50 nm</span></label>
+          <input id="catSize" type="range" min="10" max="100" step="5" value="50">
+        </div>
+        <div>
+          <label>pH <span id="phVal">7.0</span></label>
+          <input id="pH" type="range" min="1" max="14" step="0.5" value="7">
+        </div>
+        <div>
+          <label>Stirring <span id="stirVal">500 rpm</span></label>
+          <input id="stirring" type="range" min="200" max="800" step="50" value="500">
+        </div>
+        <div>
+          <label>Temp <span id="tempVal">25 °C</span></label>
+          <input id="temp" type="range" min="10" max="100" step="5" value="25">
+        </div>
+        <div>
+          <label>Light Intensity <span id="lightVal">35 W</span></label>
+          <input id="lightInt" type="range" min="20" max="50" step="5" value="35">
+        </div>
+      </div>
 
-      <label>Surface Area <span id="surfaceValue">100 m²/g</span></label>
-      <input id="surfaceArea" type="range" min="50" max="300" step="10" value="100">
+      <label>Light Source</label>
+      <select id="lightSource">
+        <option value="UV">UV Light</option>
+        <option value="LED-White" selected>White LED</option>
+        <option value="LED-Blue">Blue LED</option>
+        <option value="Visible">Visible Light</option>
+        <option value="Sunlight">Natural Sunlight</option>
+      </select>
 
-      <label>Particle Size <span id="sizeValue">70 nm</span></label>
-      <input id="particleSize" type="range" min="10" max="200" step="5" value="70">
-
-      <label>Quantum Circuit Depth</label>
+      <label>Simulation Depth</label>
       <select id="circuitDepth">
         <option value="2">Level 2 – Fast (6 qubits)</option>
         <option value="3">Level 3 – Balanced (10 qubits)</option>
-        <option value="4" selected>Level 4 – Accurate (15 qubits)</option>
+        <option value="4" selected>Level 4 – Deep (15 qubits)</option>
         <option value="5">Level 5 – Maximum (20 qubits)</option>
       </select>
 
-      <div class="depth-info">
-        <div class="depth-card" data-level="2">
-          <div class="depth-level">Level 2</div>
-          <div class="depth-qubits">6 Qubits</div>
-        </div>
-        <div class="depth-card" data-level="3">
-          <div class="depth-level">Level 3</div>
-          <div class="depth-qubits">10 Qubits</div>
-        </div>
-        <div class="depth-card active" data-level="4">
-          <div class="depth-level">Level 4</div>
-          <div class="depth-qubits">15 Qubits</div>
-        </div>
-        <div class="depth-card" data-level="5">
-          <div class="depth-level">Level 5</div>
-          <div class="depth-qubits">20 Qubits</div>
-        </div>
-      </div>
-
-      <button id="optimizeBtn" class="btn">🚀 Run Quantum Optimization</button>
+      <button id="optimizeBtn" class="btn">🚀 Run Quantum Simulation</button>
     </section>
 
     <section class="panel">
-      <h3>⚛️ Quantum Circuit & Results</h3>
+      <h3>⚛️ Results & Analysis</h3>
+      
       <div id="circuitContainer" class="circuit">
-        <div id="circuitMsg">Run optimization to visualize quantum circuit and results</div>
+        <div style="text-align:center">
+          <div style="font-size:48px">⚛️</div>
+          <div>Configure and run simulation</div>
+        </div>
       </div>
 
-      <div id="resultBox" class="results" style="display:none"></div>
+      <div id="resultBox" class="results-box" style="display:none"></div>
+
+      <h3 style="margin-top:15px">📊 Absorption Spectrum</h3>
+      <div id="absContainer" class="circuit" style="display:none;min-height:220px"></div>
+
+      <h3 style="margin-top:15px">📈 Tauc Plot (Optical Bandgap)</h3>
+      <div id="taucContainer" class="circuit" style="display:none;min-height:220px"></div>
+
+      <h3 style="margin-top:15px">📉 Degradation Kinetics</h3>
+      <div id="degradContainer" class="circuit" style="display:none;min-height:220px"></div>
 
       <div id="downloadSection" class="download-section" style="display:none">
-        <button class="download-btn" onclick="downloadResults()">📥 JSON Data</button>
-        <button class="download-btn" onclick="downloadCircuitImage()">🖼️ Circuit PNG</button>
-        <button class="download-btn excel" onclick="downloadExcel()">📊 Excel Report</button>
-        <button class="download-btn" onclick="downloadReport()">📄 Text Report</button>
+        <button class="download-btn" onclick="download('json')">📥 JSON</button>
+        <button class="download-btn" onclick="download('circuit')">🖼️ Circuit</button>
+        <button class="download-btn" onclick="download('absorption')">📊 Absorption</button>
+        <button class="download-btn" onclick="download('tauc')">📈 Tauc</button>
+        <button class="download-btn" onclick="download('kinetics')">📉 Kinetics</button>
+        <button class="download-btn excel" onclick="download('excel')">📊 Excel</button>
+        <button class="download-btn" onclick="download('report')">📄 Report</button>
       </div>
     </section>
   </main>
 
-  <footer>⚡ Quantum Photocatalyst Optimizer v2.0 • 150+ Nanomaterials • Excel Export Enabled</footer>
+  <footer>⚡ Advanced Quantum Photocatalyst Simulator v4.0 • Complete Analysis Suite</footer>
 
   <script>
     let lastResults = null;
-    let lastCircuitImage = null;
+    const ranges = {
+      dyeConc: document.getElementById('dyeConc'),
+      catConc: document.getElementById('catConc'),
+      catSize: document.getElementById('catSize'),
+      pH: document.getElementById('pH'),
+      stirring: document.getElementById('stirring'),
+      temp: document.getElementById('temp'),
+      lightInt: document.getElementById('lightInt')
+    };
 
-    const bandgapRange = document.getElementById('targetBandgap');
-    const surfaceRange = document.getElementById('surfaceArea');
-    const sizeRange = document.getElementById('particleSize');
-    const bandgapValue = document.getElementById('bandgapValue');
-    const surfaceValue = document.getElementById('surfaceValue');
-    const sizeValue = document.getElementById('sizeValue');
-    const circuitDepthSelect = document.getElementById('circuitDepth');
+    ranges.dyeConc.oninput = () => document.getElementById('dyeConcVal').textContent = ranges.dyeConc.value + ' ppm';
+    ranges.catConc.oninput = () => document.getElementById('catConcVal').textContent = ranges.catConc.value + ' mg';
+    ranges.catSize.oninput = () => document.getElementById('catSizeVal').textContent = ranges.catSize.value + ' nm';
+    ranges.pH.oninput = () => document.getElementById('phVal').textContent = ranges.pH.value;
+    ranges.stirring.oninput = () => document.getElementById('stirVal').textContent = ranges.stirring.value + ' rpm';
+    ranges.temp.oninput = () => document.getElementById('tempVal').textContent = ranges.temp.value + ' °C';
+    ranges.lightInt.oninput = () => document.getElementById('lightVal').textContent = ranges.lightInt.value + ' W';
 
-    bandgapRange.addEventListener('input', ()=> bandgapValue.textContent = bandgapRange.value + ' eV');
-    surfaceRange.addEventListener('input', ()=> surfaceValue.textContent = surfaceRange.value + ' m²/g');
-    sizeRange.addEventListener('input', ()=> sizeValue.textContent = sizeRange.value + ' nm');
+    document.getElementById('materialType').onchange = function() {
+      document.getElementById('catCount').textContent = this.selectedOptions.length;
+    };
+    document.getElementById('dyeType').onchange = function() {
+      document.getElementById('dyeCount').textContent = this.selectedOptions.length;
+    };
+    document.getElementById('circuitDepth').onchange = function() {
+      const map = {2: 6, 3: 10, 4: 15, 5: 20};
+      document.getElementById('qubitCount').textContent = map[parseInt(this.value)] || 15;
+    };
 
-    // Update selected materials count
-    document.getElementById('materialType').addEventListener('change', function() {
-      const count = this.selectedOptions.length;
-      document.getElementById('selectedCount').textContent = count;
-    });
-
-    // Update qubit count display
-    circuitDepthSelect.addEventListener('change', function() {
-      const depthMap = {2: 6, 3: 10, 4: 15, 5: 20};
-      const qubits = depthMap[parseInt(this.value)] || 15;
-      document.getElementById('qubitCount').textContent = qubits;
-      
-      // Update active depth card
-      document.querySelectorAll('.depth-card').forEach(card => {
-        card.classList.remove('active');
-        if (card.dataset.level === this.value) {
-          card.classList.add('active');
-        }
-      });
-    });
-
-    function selectAllMaterials() {
-      const sel = document.getElementById('materialType');
-      for (let option of sel.options) {
-        option.selected = true;
-      }
-      document.getElementById('selectedCount').textContent = sel.options.length;
+    function selectAll(id) {
+      Array.from(document.getElementById(id).options).forEach(o => o.selected = true);
+      document.getElementById(id).onchange();
+    }
+    function clearAll(id) {
+      Array.from(document.getElementById(id).options).forEach(o => o.selected = false);
+      document.getElementById(id).onchange();
     }
 
-    function clearMaterials() {
-      const sel = document.getElementById('materialType');
-      for (let option of sel.options) {
-        option.selected = false;
-      }
-      document.getElementById('selectedCount').textContent = 0;
-    }
-
-    document.getElementById('optimizeBtn').addEventListener('click', async () => {
-      const sel = document.getElementById('materialType');
-      const selected = Array.from(sel.selectedOptions).map(o => o.value);
+    document.getElementById('optimizeBtn').onclick = async function() {
+      const materials = Array.from(document.getElementById('materialType').selectedOptions).map(o => o.value);
+      const dyes = Array.from(document.getElementById('dyeType').selectedOptions).map(o => o.value);
       
-      if (selected.length === 0) {
-        alert('⚠️ Please select at least one material!');
+      if (!materials.length || !dyes.length) {
+        alert('⚠️ Select at least one catalyst and one dye!');
         return;
       }
 
+      const concentrations = [parseFloat(ranges.dyeConc.value)];
+      const variant = document.getElementById('dyeConcVariant').value;
+      if (variant) concentrations.push(parseFloat(variant));
+
       const params = {
-        materials: selected,
-        targetBandgap: parseFloat(bandgapRange.value),
-        surfaceArea: parseFloat(surfaceRange.value),
-        particleSize: parseFloat(sizeRange.value),
-        circuitDepth: parseInt(circuitDepthSelect.value, 10)
+        materials, dyes, dyeConcentrations: concentrations,
+        catalystConcentration: parseFloat(ranges.catConc.value),
+        catalystSize: parseFloat(ranges.catSize.value),
+        pH: parseFloat(ranges.pH.value),
+        stirringSpeed: parseFloat(ranges.stirring.value),
+        temperature: parseFloat(ranges.temp.value),
+        lightSource: document.getElementById('lightSource').value,
+        lightIntensity: parseFloat(ranges.lightInt.value),
+        circuitDepth: parseInt(document.getElementById('circuitDepth').value)
       };
 
-      const btn = document.getElementById('optimizeBtn');
-      btn.textContent = '⚙️ Optimizing...'; 
+      const btn = this;
+      btn.textContent = '⚙️ Simulating...';
       btn.disabled = true;
 
       try {
         const res = await fetch('/optimize', {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify(params)
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(params)
         });
         const data = await res.json();
-        btn.textContent = '🚀 Run Quantum Optimization'; 
+        
+        btn.textContent = '🚀 Run Quantum Simulation';
         btn.disabled = false;
 
-        if(!data.success){ 
-          alert('Error: '+(data.error||'unknown')); 
-          return; 
+        if (!data.success) {
+          alert('Error: ' + (data.error || 'unknown'));
+          return;
         }
 
         lastResults = data;
-        lastCircuitImage = data.circuit_image;
 
-        const container = document.getElementById('circuitContainer');
-        container.innerHTML = `<img src="data:image/png;base64,${data.circuit_image}" style="max-width:100%;border-radius:8px;">`;
+        document.getElementById('circuitContainer').innerHTML = 
+          `<img src="data:image/png;base64,${data.circuit_image}">`;
+        document.getElementById('absContainer').innerHTML = 
+          `<img src="data:image/png;base64,${data.absorption_plot}">`;
+        document.getElementById('absContainer').style.display = 'flex';
+        document.getElementById('taucContainer').innerHTML = 
+          `<img src="data:image/png;base64,${data.tauc_plot}">`;
+        document.getElementById('taucContainer').style.display = 'flex';
+        document.getElementById('degradContainer').innerHTML = 
+          `<img src="data:image/png;base64,${data.degradation_plot}">`;
+        document.getElementById('degradContainer').style.display = 'flex';
 
         const box = document.getElementById('resultBox');
         box.style.display = 'block';
         box.innerHTML = `
-          <div style="margin-bottom:12px">
-            <strong>Selected Materials:</strong> ${data.materials.join(', ')}
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
-            <div><strong>Qubits:</strong> ${data.num_qubits}</div>
-            <div><strong>Depth:</strong> Level ${data.circuit_depth}</div>
-            <div><strong>Energy:</strong> ${data.final_energy.toFixed(4)}</div>
-          </div>
-          <div style="background:rgba(0,216,255,0.05);padding:12px;border-radius:6px;border-left:3px solid var(--accent1)">
-            <div style="margin-bottom:8px"><strong>📊 Performance Metrics:</strong></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:14px">
-              <div>🎯 Bandgap: <strong>${data.optimized_params.bandgap.toFixed(2)} eV</strong></div>
-              <div>⚡ Efficiency: <strong>${data.optimized_params.efficiency.toFixed(1)}%</strong></div>
-              <div>🌈 Absorption: <strong>${data.optimized_params.absorption.toFixed(1)}%</strong></div>
-              <div>✨ Quantum Yield: <strong>${data.optimized_params.quantum_yield.toFixed(1)}%</strong></div>
-              <div style="grid-column:1/-1">🛡️ Stability: <strong>${data.optimized_params.stability.toFixed(1)}%</strong></div>
+          <div style="margin-bottom:10px"><strong>Materials:</strong> ${data.materials.join(', ')}</div>
+          <div style="margin-bottom:10px"><strong>Dyes:</strong> ${data.dyes.join(', ')}</div>
+          <div style="background:rgba(0,216,255,0.05);padding:10px;border-radius:6px;margin:10px 0;border-left:3px solid #00d8ff">
+            <div style="font-weight:bold;margin-bottom:6px">📊 Optical Properties</div>
+            <div class="metric-grid">
+              <div>Bandgap: <strong>${data.optimized_params.bandgap.toFixed(2)} eV</strong></div>
+              <div>Optical Gap: <strong>${data.optical_bandgap.toFixed(2)} eV</strong></div>
+              <div>Absorption: <strong>${data.optimized_params.absorption.toFixed(1)}%</strong></div>
+              <div>Quantum Yield: <strong>${data.optimized_params.quantum_yield.toFixed(1)}%</strong></div>
             </div>
           </div>
-          <p style="margin-top:12px;color:#a7dffb;font-style:italic;border-top:1px solid rgba(0,216,255,0.1);padding-top:12px">
-            ${data.analysis}
-          </p>
+          <div style="background:rgba(255,0,212,0.05);padding:10px;border-radius:6px;border-left:3px solid #ff00d4">
+            <div style="font-weight:bold;margin-bottom:6px">🔬 Degradation Performance</div>
+            <div class="metric-grid">
+              <div>Degradation: <strong>${data.dye_degradation.toFixed(1)}%</strong></div>
+              <div>Time: <strong>${data.reaction_time} min</strong></div>
+              <div>Efficiency: <strong>${data.optimized_params.efficiency.toFixed(1)}%</strong></div>
+              <div>Yield: <strong>${data.yield_percentage.toFixed(1)}%</strong></div>
+            </div>
+          </div>
+          <p style="margin-top:10px;color:#a7dffb;font-size:12px;font-style:italic">${data.analysis}</p>
         `;
 
         document.getElementById('downloadSection').style.display = 'grid';
 
-      } catch(err){
-        btn.textContent = '🚀 Run Quantum Optimization'; 
+      } catch (err) {
+        btn.textContent = '🚀 Run Quantum Simulation';
         btn.disabled = false;
-        alert('❌ Network/Server error: '+err);
+        alert('❌ Error: ' + err);
       }
-    });
+    };
 
-    function downloadResults() {
-      if (!lastResults) {
-        alert('No results available. Please run optimization first.');
-        return;
-      }
-      
-      const dataStr = JSON.stringify(lastResults, null, 2);
-      const blob = new Blob([dataStr], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `quantum_optimization_${Date.now()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-
-    function downloadCircuitImage() {
-      if (!lastCircuitImage) {
-        alert('No circuit image available. Please run optimization first.');
-        return;
-      }
-
-      const a = document.createElement('a');
-      a.href = `data:image/png;base64,${lastCircuitImage}`;
-      a.download = `quantum_circuit_${Date.now()}.png`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-
-    async function downloadExcel() {
-      if (!lastResults) {
-        alert('No results available. Please run optimization first.');
-        return;
-      }
-
-      try {
+    async function download(type) {
+      if (!lastResults) { alert('No results'); return; }
+      if (type === 'excel') {
         const res = await fetch('/download/excel', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(lastResults)
         });
-
-        if (!res.ok) {
-          throw new Error('Failed to generate Excel file');
-        }
-
         const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
-        a.download = `quantum_optimization_${Date.now()}.xlsx`;
-        document.body.appendChild(a);
+        a.href = URL.createObjectURL(blob);
+        a.download = `report_${Date.now()}.xlsx`;
         a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      } catch(err) {
-        alert('Error downloading Excel file: ' + err.message);
-      }
-    }
-
-    function downloadReport() {
-      if (!lastResults) {
-        alert('No results available. Please run optimization first.');
-        return;
-      }
-
-      const report = `
-QUANTUM PHOTOCATALYST OPTIMIZATION REPORT
-=========================================
+      } else if (type === 'json') {
+        const blob = new Blob([JSON.stringify(lastResults, null, 2)], {type: 'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `data_${Date.now()}.json`;
+        a.click();
+      } else if (['circuit', 'absorption', 'tauc', 'kinetics'].includes(type)) {
+        const imgMap = {
+          circuit: lastResults.circuit_image,
+          absorption: lastResults.absorption_plot,
+          tauc: lastResults.tauc_plot,
+          kinetics: lastResults.degradation_plot
+        };
+        const a = document.createElement('a');
+        a.href = `data:image/png;base64,${imgMap[type]}`;
+        a.download = `${type}_${Date.now()}.png`;
+        a.click();
+      } else if (type === 'report') {
+        const r = lastResults;
+        const report = `ADVANCED PHOTOCATALYST ANALYSIS REPORT
 Generated: ${new Date().toLocaleString()}
 
-MATERIALS CONFIGURATION
------------------------
-Selected Materials: ${lastResults.materials.join(', ')}
-Number of Materials: ${lastResults.materials.length}
+MATERIALS: ${r.materials.join(', ')}
+DYES: ${r.dyes.join(', ')}
+Concentrations: ${r.dyeConcentrations?.join(', ') || r.dye_concentration} ppm
 
-QUANTUM CIRCUIT PARAMETERS
---------------------------
-Number of Qubits: ${lastResults.num_qubits}
-Circuit Depth Level: ${lastResults.circuit_depth}
-Final Ground State Energy: ${lastResults.final_energy.toFixed(6)}
+OPTICAL PROPERTIES
+Bandgap: ${r.optimized_params.bandgap.toFixed(2)} eV
+Optical Bandgap: ${r.optical_bandgap.toFixed(2)} eV
+Absorption: ${r.optimized_params.absorption.toFixed(2)}%
 
-MATERIAL PROPERTIES
--------------------
-Surface Area: ${lastResults.surface_area} m²/g
-Particle Size: ${lastResults.particle_size} nm
-
-OPTIMIZED PERFORMANCE METRICS
-------------------------------
-Target Bandgap: ${lastResults.optimized_params.bandgap.toFixed(2)} eV
-Photocatalytic Efficiency: ${lastResults.optimized_params.efficiency.toFixed(2)}%
-Light Absorption: ${lastResults.optimized_params.absorption.toFixed(2)}%
-Quantum Yield: ${lastResults.optimized_params.quantum_yield.toFixed(2)}%
-Material Stability: ${lastResults.optimized_params.stability.toFixed(2)}%
+DEGRADATION PERFORMANCE
+Degradation: ${r.dye_degradation.toFixed(2)}%
+Time: ${r.reaction_time} min
+Yield: ${r.yield_percentage.toFixed(2)}%
 
 ANALYSIS
---------
-${lastResults.analysis}
-
-OPTIMIZATION HISTORY
---------------------
-Total Iterations: ${lastResults.history.length}
-Initial Energy: ${lastResults.history[0].toFixed(6)}
-Final Energy: ${lastResults.history[lastResults.history.length-1].toFixed(6)}
-Energy Reduction: ${(lastResults.history[0] - lastResults.history[lastResults.history.length-1]).toFixed(6)}
-
-CONVERGENCE DATA (First 10 iterations)
----------------------------------------
-${lastResults.history.slice(0, 10).map((e, i) => `Iteration ${i}: ${e.toFixed(6)}`).join('\n')}
-
-=========================================
-Report generated by Quantum Photocatalyst Optimizer v2.0
-Powered by Qiskit Quantum Computing Framework
-      `.trim();
-
-      const blob = new Blob([report], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `quantum_optimization_report_${Date.now()}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+${r.analysis}`;
+        const blob = new Blob([report], {type: 'text/plain'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `report_${Date.now()}.txt`;
+        a.click();
+      }
     }
-
-    // Initialize display
-    document.getElementById('selectedCount').textContent = 1; // TiO2 is selected by default
   </script>
 </body>
 </html>
