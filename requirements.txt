@@ -1,0 +1,9 @@
+Flask
+Werkzeug
+qiskit
+qiskit-algorithms
+numpy
+matplotlib
+scipy
+qiskit-aer
+openpyxl
